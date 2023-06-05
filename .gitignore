@@ -3,7 +3,8 @@ __pycache__/
 *.py[cod]
 *$py.class
 models/
-test_crop_image/
+testing_images/
+Detections/
 # C extensions
 *.so
 
