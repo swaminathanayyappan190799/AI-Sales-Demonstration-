@@ -5,6 +5,7 @@ __pycache__/
 models/
 testing_images/
 Detections/
+detctions/
 # C extensions
 *.so
 
