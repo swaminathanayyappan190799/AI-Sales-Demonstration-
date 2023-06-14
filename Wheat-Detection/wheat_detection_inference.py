@@ -5,26 +5,26 @@ from ultralytics import YOLO
 from log_settings import logger
 
 
-class CropWeedDetection():
+class WheatDetection():
     def __init__(self, input_image) -> None:
         self.input_data = input_image
         self.model = None
         self.labels = None
-        logger.info("Initating Crop Weed detection for the input images")
+        logger.info("Initating Wheat Detection for the input images")
     
     def load_model(self,model_path):
         try:
             model = YOLO(model=model_path)
             return model
         except:
-            logger.error("Error in loading CropWeedDetection Model")
+            logger.error("Error in loading WheatDetection Model")
 
     def load_labels(self,model_file):
         try:
             labels = list(model_file.names.values())
             return labels
         except:
-            logger.error("Error in loading CropWeedDetection labels")
+            logger.error("Error in loading WheatDetection labels")
     
     def save_image(self, img_array):
         try:
@@ -56,17 +56,17 @@ class CropWeedDetection():
         """
         try:
             img = cv2.imread(image_path)
-            color_scheme = {"crop":(184, 48, 48),"weed":(48, 184, 48),'label':(255,255,255)}
-            counts = {"crop":0,"weed":0}
+            color_scheme = {"none":(184, 48, 48),"opacity":(48, 184, 48),'label':(255,255,255)}
+            counts = {"none":0,"opacity":0}
             for val in zip(inference_data[0],inference_data[1],inference_data[2]):
                 x,y,w,h = val[0]
                 confidence = str(round(val[1]*100,2))
                 classes = self.labels[int(val[2])]
 
-                if classes == "crop":
-                    counts["crop"]+=1
-                if classes == "weed":
-                    counts["weed"]+=1
+                if classes == "none":
+                    counts["none"]+=1
+                if classes == "opacity":
+                    counts["opacity"]+=1
 
                 #For drawing bounding box
                 cv2.rectangle(
@@ -106,7 +106,7 @@ class CropWeedDetection():
                     thickness=2
                 ) 
             cv2.imwrite(image_path, img=img)
-            counts["Total"] = counts["crop"]+counts["weed"]
+            counts["Total"] = counts["none"]+counts["opacity"]
             return image_path, counts
         except:
             logger.info("Error in draw_annotations_on_image()")
@@ -119,11 +119,12 @@ class CropWeedDetection():
             detection_results_path = os.path.join(os.getcwd(),"Detections")
             if not os.path.exists(detection_results_path):
                 os.mkdir(path=detection_results_path)
-            self.model = self.load_model(model_path=f"{os.getcwd()}{os.sep}models{os.sep}crop_weed_detection.pt")
+            self.model = self.load_model(model_path=f"{os.getcwd()}{os.sep}models{os.sep}wheat_detection.pt")
             self.labels = self.load_labels(model_file=self.model)
             saved_file_path = self.save_image(img_array=self.input_data)
             detection_result = self.perform_inference(filepath=saved_file_path, model=self.model)
             annot_img_path, obj_counts = self.draw_annotations_on_image(image_path=saved_file_path, inference_data=detection_result)
             return annot_img_path, obj_counts
         except:
-            logger.error("Error in run_detection Crop_Weed_detection()")
+            logger.error("Error in run_detection wheat_detection()")
+
