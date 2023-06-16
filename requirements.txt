@@ -6,7 +6,11 @@ tensorflow
 scikit-learn
 scikit-image
 pyqt5
-torch==1.13.0
-torchvision==0.14.0
-torchaudio==0.13.0
+torch
+torchvision
+torchaudio
 ultralytics
+supervision==0.1.0
+yolox
+onemetric
+# pip install -e git+https://github.com/samson-wang/cython_bbox.git#egg=cython-bbox

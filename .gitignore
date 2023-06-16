@@ -4,8 +4,9 @@ __pycache__/
 *$py.class
 models/
 testing_images/
+testing_data/
 Detections/
-detctions/
+detections/
 # C extensions
 *.so
 
